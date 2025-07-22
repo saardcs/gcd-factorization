@@ -92,7 +92,6 @@ if st.session_state.index < len(problems):
                 st.session_state.correct_gcd = None
                 st.session_state.correct_a_factors = []
                 st.session_state.correct_b_factors = []
-                st.session_state.gcd_input = 1
                 st.rerun()
             else:
                 st.error("❌ Incorrect GCD. Try again!")
