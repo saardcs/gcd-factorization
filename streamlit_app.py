@@ -3,10 +3,29 @@ import qrcode
 import io
 
 # Problem Set
-problems = [
-    (12, 18), (24, 30), (15, 20),
-    (28, 35), (50, 75)
-]
+# problems = [
+#     (12, 18), (24, 30), (15, 20),
+#     (28, 35), (50, 75)
+# ]
+import random
+
+def generate_problem_set(n=5):
+    problems = []
+    while len(problems) < n:
+        gcd = random.randint(2, 15)
+        x = random.randint(2, 10)
+        y = random.randint(2, 10)
+        a = gcd * x
+        b = gcd * y
+
+        # Skip if numbers are too big or too close
+        if a > 100 or b > 100 or abs(a - b) < 5:
+            continue
+
+        problems.append((a, b))
+    return problems
+
+problems = generate_problem_set()
 
 # Session State Initialization
 if "index" not in st.session_state:
