@@ -5,14 +5,14 @@ import qrcode
 import io
 
 # --------------------------
-# Updated Problem Set (smaller numbers for listing)
+# Problem Set (smaller numbers for easier listing)
 problems = [
     (12, 18), (24, 30), (15, 20),
     (28, 35), (50, 75)  # Smaller numbers for easier listing
 ]
 
 # --------------------------
-# Session State Initialization (ensures state is defined before use)
+# Session State Initialization
 if "index" not in st.session_state:
     st.session_state.index = 0
     st.session_state.score = 0
@@ -99,9 +99,9 @@ if st.session_state.index < len(problems):
             except ValueError:
                 st.error("❌ Invalid input. Please list the factors correctly (e.g., 1, 2, 3).")
     
-    else:
-        # If factors are submitted, prompt for GCD input
-        st.write("Please submit the correct GCD to proceed.")
+    # If factors are confirmed, prompt for GCD input
+    elif st.session_state.factors_submitted and not st.session_state.correct_factors:
+        st.write("Please submit the correct factors to proceed.")
 
 else:
     st.success("🎉 You've completed all problems!")
