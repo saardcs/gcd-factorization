@@ -21,7 +21,7 @@ st.markdown("Type the factors of the two numbers below, then calculate the GCD b
 
 # Sidebar QR Code
 st.sidebar.header("Scan This QR Code to View Menu Online")
-qr_link = "https://gcd-lab.streamlit.app"
+qr_link = "https://gcd-factorization.streamlit.app"
 qr = qrcode.make(qr_link)
 buf = io.BytesIO()
 qr.save(buf)
@@ -51,7 +51,7 @@ if st.session_state.index < len(problems):
                 st.session_state.correct_factors = False
                 st.session_state.correct_gcd = None
             else:
-                st.success("✅ Factors are correct! Now, enter the GCD of **{a}** and **{b}**.")
+                st.success(f"✅ Factors are correct! Now, enter the GCD of **{a}** and **{b}**.")
                 st.session_state.correct_factors = True
                 st.session_state.correct_gcd = max(correct_a & correct_b)
         except ValueError:
