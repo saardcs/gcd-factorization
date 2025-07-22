@@ -93,9 +93,9 @@ if st.session_state.index < len(problems):
                             st.rerun()  # Move to the next problem after correct answer
                         else:
                             st.error("❌ Incorrect GCD. Try again!")
-                            # Reset the GCD field to allow another attempt without resetting other inputs
+                            # Only reset the GCD input, not the factors input
                             st.session_state.user_gcd = None  # Reset user GCD so they can try again
-                            st.rerun()  # Refresh to keep GCD input visible for retry
+                            st.experimental_rerun()  # Refresh to keep GCD input visible for retry
             except ValueError:
                 st.error("❌ Invalid input. Please list the factors correctly (e.g., 1, 2, 3).")
     
