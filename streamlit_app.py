@@ -8,7 +8,7 @@ import io
 # Problem Set (smaller numbers for easier listing)
 problems = [
     (12, 18), (24, 30), (15, 20),
-    (28, 35), (50, 75)  # Smaller numbers for easier listing
+    (28, 35), (50, 75)
 ]
 
 # --------------------------
@@ -16,10 +16,10 @@ problems = [
 if "index" not in st.session_state:
     st.session_state.index = 0
     st.session_state.score = 0
-    st.session_state.factors_submitted = False  # Track whether factors are confirmed
-    st.session_state.correct_factors = False  # Track if factors are correct
-    st.session_state.user_gcd = None  # Track user GCD input
-    st.session_state.correct_gcd = None  # Track correct GCD for comparison
+    st.session_state.factors_submitted = False
+    st.session_state.correct_factors = False
+    st.session_state.user_gcd = None
+    st.session_state.correct_gcd = None
 
 # --------------------------
 # Header
@@ -42,23 +42,18 @@ if st.session_state.index < len(problems):
     st.subheader(f"🔢 Problem {st.session_state.index + 1} of {len(problems)}")
     st.write(f"What are the factors of **{a}** and **{b}**?")
 
-    # Display the factors input only if they haven't been submitted yet
     if not st.session_state.factors_submitted:
-        a_factors = st.text_area(f"List the factors of **{a}** (separate by commas):", key="a_factors", help="Example: 1, 2, 3, 4, 6, 12")
-        b_factors = st.text_area(f"List the factors of **{b}** (separate by commas):", key="b_factors", help="Example: 1, 2, 3, 6, 9, 18")
+        a_factors_input = st.text_area(f"List the factors of **{a}** (separate by commas):", key="a_factors", help="Example: 1, 2, 3, 4, 6, 12")
+        b_factors_input = st.text_area(f"List the factors of **{b}** (separate by commas):", key="b_factors", help="Example: 1, 2, 3, 6, 9, 18")
 
-        # Submit button for factors
         if st.button("Submit Factors"):
             try:
-                # Clean up the input to remove non-numeric and spaces
-                a_factors = set(map(int, a_factors.replace(" ", "").split(",")))
-                b_factors = set(map(int, b_factors.replace(" ", "").split(",")))
+                a_factors = set(map(int, a_factors_input.replace(" ", "").split(",")))
+                b_factors = set(map(int, b_factors_input.replace(" ", "").split(",")))
 
-                # Correct factors
-                correct_a_factors = set([i for i in range(1, a + 1) if a % i == 0])
-                correct_b_factors = set([i for i in range(1, b + 1) if b % i == 0])
+                correct_a_factors = set(i for i in range(1, a + 1) if a % i == 0)
+                correct_b_factors = set(i for i in range(1, b + 1) if b % i == 0)
 
-                # Check if factors are correct
                 if a_factors != correct_a_factors:
                     st.error("❌ Incorrect factors for A. Please check your list and try again!")
                     st.session_state.correct_factors = False
@@ -66,42 +61,35 @@ if st.session_state.index < len(problems):
                     st.error("❌ Incorrect factors for B. Please check your list and try again!")
                     st.session_state.correct_factors = False
                 else:
-                    # After correctly listing the factors, set a flag to show the GCD input
-                    st.session_state.factors_submitted = True  # Factors confirmed
-                    st.session_state.correct_factors = True  # Factors are correct
-                    common_factors = a_factors & b_factors  # Intersection of sets
-                    correct_gcd = max(common_factors)  # The GCD is the largest common factor
-                    st.session_state.correct_gcd = correct_gcd  # Store correct GCD
-
+                    st.session_state.factors_submitted = True
+                    st.session_state.correct_factors = True
+                    common_factors = a_factors & b_factors
+                    st.session_state.correct_gcd = max(common_factors)
                     st.success(f"✅ Factors are correct! Now, enter the GCD of **{a}** and **{b}**.")
-                    
-                    # Display GCD input only now
-                    user_gcd = st.number_input(f"Now, what is the GCD of **{a}** and **{b}**?", min_value=1, step=1)
-
-                    st.session_state.user_gcd = user_gcd  # Track user GCD input
-
-                    # Submit button for GCD
-                    if st.button("Submit GCD"):
-                        if st.session_state.user_gcd == st.session_state.correct_gcd:
-                            st.success(f"✅ Correct! The GCD of **{a}** and **{b}** is indeed {st.session_state.correct_gcd}.")
-                            st.session_state.score += 1
-                            st.session_state.index += 1
-                            st.session_state.factors_submitted = False  # Reset for next problem
-                            st.session_state.correct_factors = False  # Reset factors check
-                            st.session_state.user_gcd = None  # Reset user GCD
-                            st.session_state.correct_gcd = None  # Reset correct GCD
-                            st.experimental_rerun()  # Move to the next problem after correct answer
-                        else:
-                            st.error("❌ Incorrect GCD. Try again!")
-                            # Do not reset factors or any other field, just keep the same problem
-                            st.session_state.user_gcd = None  # Reset user GCD so they can try again
-                            st.experimental_rerun()  # Refresh to keep GCD input visible for retry
             except ValueError:
                 st.error("❌ Invalid input. Please list the factors correctly (e.g., 1, 2, 3).")
-    
-    # If factors are confirmed, prompt for GCD input
-    elif st.session_state.factors_submitted and st.session_state.correct_factors:
-        st.write("Now, enter the GCD of **{a}** and **{b}**.")
+
+    # Separate GCD input area (remains visible across reruns)
+    if st.session_state.factors_submitted and st.session_state.correct_factors:
+        st.success(f"✅ Factors are correct! Now, enter the GCD of **{a}** and **{b}**.")
+        user_gcd = st.number_input(
+            f"Now, what is the GCD of **{a}** and **{b}**?",
+            min_value=1, step=1, key="gcd_input"
+        )
+
+        if st.button("Submit GCD"):
+            if user_gcd == st.session_state.correct_gcd:
+                st.success(f"✅ Correct! The GCD of **{a}** and **{b}** is indeed {st.session_state.correct_gcd}.")
+                st.session_state.score += 1
+                st.session_state.index += 1
+                st.session_state.factors_submitted = False
+                st.session_state.correct_factors = False
+                st.session_state.user_gcd = None
+                st.session_state.correct_gcd = None
+                st.session_state.gcd_input = 1
+                st.experimental_rerun()
+            else:
+                st.error("❌ Incorrect GCD. Try again!")
 
 else:
     st.success("🎉 You've completed all problems!")
@@ -110,8 +98,9 @@ else:
     if st.button("🔁 Start Over"):
         st.session_state.index = 0
         st.session_state.score = 0
-        st.session_state.factors_submitted = False  # Reset the state for factors submission
-        st.session_state.correct_factors = False  # Reset factors check
-        st.session_state.user_gcd = None  # Reset GCD
-        st.session_state.correct_gcd = None  # Reset correct GCD
-        st.experimental_rerun()  # Restart the process from the beginning
+        st.session_state.factors_submitted = False
+        st.session_state.correct_factors = False
+        st.session_state.user_gcd = None
+        st.session_state.correct_gcd = None
+        st.session_state.gcd_input = 1
+        st.experimental_rerun()
