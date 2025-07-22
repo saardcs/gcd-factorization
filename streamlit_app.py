@@ -1,19 +1,19 @@
 import streamlit as st
 
-# --------------------------
-# Problems
+# -----------------------
+# Problems list
 problems = [(12, 18), (24, 30), (15, 20), (28, 35), (50, 75)]
 
-# --------------------------
-# Initialize session state variables
+# -----------------------
+# Initialize session state variables if missing
 if "index" not in st.session_state:
     st.session_state.index = 0
 if "score" not in st.session_state:
     st.session_state.score = 0
 if "factors_submitted" not in st.session_state:
     st.session_state.factors_submitted = False
-if "gcd_submitted" not in st.session_state:
-    st.session_state.gcd_submitted = False
+if "gcd_correct" not in st.session_state:
+    st.session_state.gcd_correct = False
 if "correct_a_factors" not in st.session_state:
     st.session_state.correct_a_factors = []
 if "correct_b_factors" not in st.session_state:
@@ -21,19 +21,18 @@ if "correct_b_factors" not in st.session_state:
 if "correct_gcd" not in st.session_state:
     st.session_state.correct_gcd = None
 
-# --------------------------
+# -----------------------
 a, b = problems[st.session_state.index]
 
-# --------------------------
 st.title("💡 GCD Lab")
 st.markdown(f"### Problem {st.session_state.index + 1} of {len(problems)}")
 st.markdown(f"**What are the factors of {a} and {b}?**")
 
-# --------------------------
-# Factor input only shown if not submitted yet
+# -----------------------
+# Show factor input only if not submitted yet
 if not st.session_state.factors_submitted:
-    a_factors_input = st.text_area(f"List the factors of {a} (comma separated):", key="a_factors_input")
-    b_factors_input = st.text_area(f"List the factors of {b} (comma separated):", key="b_factors_input")
+    a_factors_input = st.text_area(f"Factors of {a} (comma separated):", key="a_factors_input")
+    b_factors_input = st.text_area(f"Factors of {b} (comma separated):", key="b_factors_input")
 
     if st.button("Submit Factors"):
         try:
@@ -52,61 +51,58 @@ if not st.session_state.factors_submitted:
                 st.session_state.correct_a_factors = sorted(correct_a_factors)
                 st.session_state.correct_b_factors = sorted(correct_b_factors)
                 st.session_state.correct_gcd = max(correct_a_factors & correct_b_factors)
-                st.success("✅ Factors are correct! Now enter the GCD.")
+                st.experimental_rerun()
         except Exception:
-            st.error("❌ Invalid input format. Use comma-separated numbers.")
+            st.error("❌ Invalid input. Please enter comma-separated numbers.")
 
-# --------------------------
-# After factor submission, show the confirmed factors always
+# -----------------------
+# If factors submitted, show confirmed factors
 if st.session_state.factors_submitted:
     st.markdown(f"✔️ Factors of {a}: {', '.join(map(str, st.session_state.correct_a_factors))}")
     st.markdown(f"✔️ Factors of {b}: {', '.join(map(str, st.session_state.correct_b_factors))}")
 
-# --------------------------
-# GCD input shown only if factors submitted and GCD not yet correctly submitted
-if st.session_state.factors_submitted and not st.session_state.gcd_submitted:
+# -----------------------
+# Show GCD input if factors submitted and GCD not yet correct
+if st.session_state.factors_submitted and not st.session_state.gcd_correct:
     gcd_input = st.number_input(f"What is the GCD of {a} and {b}?", min_value=1, step=1, key="gcd_input")
     if st.button("Submit GCD"):
         if gcd_input == st.session_state.correct_gcd:
             st.success(f"✅ Correct! The GCD of {a} and {b} is {gcd_input}.")
-            st.session_state.gcd_submitted = True
+            st.session_state.gcd_correct = True
             st.session_state.score += 1
+            st.experimental_rerun()
         else:
-            st.error("❌ Incorrect GCD. Please try again.")
+            st.error("❌ Incorrect GCD. Try again.")
 
-# --------------------------
-# After correct GCD submission, show "Next Problem" or "Done" button
-if st.session_state.gcd_submitted:
+# -----------------------
+# After correct GCD, show Next Problem button or completion message
+if st.session_state.gcd_correct:
     if st.session_state.index < len(problems) - 1:
         if st.button("➡️ Next Problem"):
-            # Reset everything for next problem
+            # Reset for next problem
             st.session_state.index += 1
             st.session_state.factors_submitted = False
-            st.session_state.gcd_submitted = False
+            st.session_state.gcd_correct = False
             st.session_state.correct_a_factors = []
             st.session_state.correct_b_factors = []
             st.session_state.correct_gcd = None
-            # Clear input widget states explicitly to avoid stale inputs
-            if "a_factors_input" in st.session_state:
-                del st.session_state["a_factors_input"]
-            if "b_factors_input" in st.session_state:
-                del st.session_state["b_factors_input"]
-            if "gcd_input" in st.session_state:
-                del st.session_state["gcd_input"]
+            # Clear input widgets
+            for key in ["a_factors_input", "b_factors_input", "gcd_input"]:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.experimental_rerun()
     else:
-        st.success(f"🎉 You've completed all {len(problems)} problems!")
-        st.write(f"Your final score is {st.session_state.score} / {len(problems)}.")
+        st.success(f"🎉 You completed all {len(problems)} problems!")
+        st.write(f"Final Score: {st.session_state.score} / {len(problems)}")
         if st.button("🔄 Restart"):
             st.session_state.index = 0
             st.session_state.score = 0
             st.session_state.factors_submitted = False
-            st.session_state.gcd_submitted = False
+            st.session_state.gcd_correct = False
             st.session_state.correct_a_factors = []
             st.session_state.correct_b_factors = []
             st.session_state.correct_gcd = None
-            if "a_factors_input" in st.session_state:
-                del st.session_state["a_factors_input"]
-            if "b_factors_input" in st.session_state:
-                del st.session_state["b_factors_input"]
-            if "gcd_input" in st.session_state:
-                del st.session_state["gcd_input"]
+            for key in ["a_factors_input", "b_factors_input", "gcd_input"]:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.experimental_rerun()
