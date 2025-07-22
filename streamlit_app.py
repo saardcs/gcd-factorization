@@ -104,11 +104,11 @@ else:
             row = [name.strip(), team.strip(), timestamp]
             sheet.append_row(row)
             st.success("✅ Score submitted!")
-            if st.button("🔁 Start Over"):
-                st.session_state.index = 0
-                st.session_state.score = 0
-                st.session_state.correct_factors = False
-                st.session_state.correct_gcd = None
-                st.rerun()
+            # if st.button("🔁 Start Over"):
+            #     st.session_state.index = 0
+            #     st.session_state.score = 0
+            #     st.session_state.correct_factors = False
+            #     st.session_state.correct_gcd = None
+            #     st.rerun()
         else:
             st.warning("Please enter your name and team name.")
