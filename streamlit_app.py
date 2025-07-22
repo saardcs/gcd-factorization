@@ -75,9 +75,11 @@ if st.session_state.index < len(problems):
 else:
     st.success("🎉 You've completed all problems!")
     # st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
-    name = st.text_input("Enter your name to save your score:")
+    name = st.text_input("Enter your name:")
+    team = st.text_input("Enter your team:")
+    
     if st.button("Submit Score"):
-        if name.strip():
+        if name.strip() and team.strip():
             import gspread
             from google.oauth2.service_account import Credentials
 
@@ -99,11 +101,11 @@ else:
             except gspread.WorksheetNotFound:
                 st.error(f"Worksheet '{selected_class}' not found. Please check your Google Sheet.")
 
-            row = [name, timestamp]
+            row = [name.strip(), team.strip(), timestamp]
             sheet.append_row(row)
             st.success("✅ Score submitted!")
-    else:
-        st.warning("Please enter a name.")
+        else:
+            st.warning("Please enter a name.")
 
     if st.button("🔁 Start Over"):
         st.session_state.index = 0
