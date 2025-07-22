@@ -50,7 +50,7 @@ qr.save(buf)
 buf.seek(0)
 st.sidebar.image(buf, width=300, caption=qr_link)
 
-if st.session_state.index < len(problems):
+if st.session_state.index < len(st.session_state.problems):
     a, b = st.session_state.problems[st.session_state.current_index]
     st.subheader(f"🔢 Problem {st.session_state.index + 1} of {len(problems)}")
     st.write(f"What are the factors of **{a}** and **{b}**?")
@@ -96,7 +96,7 @@ if st.session_state.index < len(problems):
                 st.error("❌ Incorrect GCD. Try again!")
 else:
     st.success("🎉 You've completed all problems!")
-    st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
+    st.write(f"Your score: **{st.session_state.score} / {len(st.session_state.problems)}**")
 
     if st.button("🔁 Start Over"):
         st.session_state.index = 0
