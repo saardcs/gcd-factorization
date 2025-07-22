@@ -56,7 +56,7 @@ if st.session_state.index < len(problems):
     b_factors = st.text_area("List factors of B (separate by commas):", key="b_factors", help="Example: 1, 2, 3, 6, 9, 18")
 
     # Submit button
-    if st.button("Submit"):
+    if st.button("Submit Factors"):
         # Clean up the input to remove non-numeric and spaces
         try:
             a_factors = set(map(int, a_factors.replace(" ", "").split(",")))
@@ -72,15 +72,14 @@ if st.session_state.index < len(problems):
             elif b_factors != correct_b_factors:
                 st.error("❌ Incorrect factors for B. Please check your list and try again!")
             else:
-                # Calculate GCD from common factors
+                # After correctly listing the factors, now ask for the GCD
                 common_factors = a_factors & b_factors  # Intersection of sets
                 correct_gcd = max(common_factors)
 
-                # Ask for GCD after listing the factors
                 user_gcd = st.number_input(f"Now, what is the GCD of {a} and {b}?", min_value=1, step=1)
 
                 if user_gcd == correct_gcd:
-                    st.success("✅ Correct! The GCD is indeed " + str(correct_gcd))
+                    st.success(f"✅ Correct! The GCD of {a} and {b} is indeed {correct_gcd}.")
                     st.session_state.score += 1
                     st.session_state.index += 1
                     st.rerun()
