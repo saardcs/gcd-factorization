@@ -25,7 +25,10 @@ def generate_problem_set(n=5):
         problems.append((a, b))
     return problems
 
-problems = generate_problem_set()
+# problems = generate_problem_set()
+if "problems" not in st.session_state:
+    st.session_state.problems = generate_problem_set()
+    st.session_state.current_index = 0
 
 # Session State Initialization
 if "index" not in st.session_state:
@@ -48,7 +51,7 @@ buf.seek(0)
 st.sidebar.image(buf, width=300, caption=qr_link)
 
 if st.session_state.index < len(problems):
-    a, b = problems[st.session_state.index]
+    a, b = st.session_state.problems[st.session_state.current_index]
     st.subheader(f"🔢 Problem {st.session_state.index + 1} of {len(problems)}")
     st.write(f"What are the factors of **{a}** and **{b}**?")
 
