@@ -12,13 +12,14 @@ problems = [
 ]
 
 # --------------------------
-# Session State Initialization (no shuffle)
+# Session State Initialization (ensures state is defined before use)
 if "index" not in st.session_state:
     st.session_state.index = 0
     st.session_state.score = 0
     st.session_state.factors_submitted = False  # Track whether factors are confirmed
     st.session_state.correct_factors = False  # Track if factors are correct
     st.session_state.user_gcd = None  # Track user GCD input
+    st.session_state.correct_gcd = None  # Track correct GCD for comparison
 
 # --------------------------
 # Header
@@ -88,6 +89,7 @@ if st.session_state.index < len(problems):
                             st.session_state.factors_submitted = False  # Reset for next problem
                             st.session_state.correct_factors = False  # Reset factors check
                             st.session_state.user_gcd = None  # Reset user GCD
+                            st.session_state.correct_gcd = None  # Reset correct GCD
                             st.rerun()  # Move to the next problem after correct answer
                         else:
                             st.error("❌ Incorrect GCD. Try again!")
@@ -108,4 +110,5 @@ else:
         st.session_state.factors_submitted = False  # Reset the state for factors submission
         st.session_state.correct_factors = False  # Reset factors check
         st.session_state.user_gcd = None  # Reset GCD
+        st.session_state.correct_gcd = None  # Reset correct GCD
         st.rerun()
