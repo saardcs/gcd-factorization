@@ -74,7 +74,36 @@ if st.session_state.index < len(problems):
                 st.error("❌ Incorrect GCD. Try again!")
 else:
     st.success("🎉 You've completed all problems!")
-    st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
+    # st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
+    name = st.text_input("Enter your name to save your score:")
+    if st.button("Submit Score"):
+        if name.strip():
+            import gspread
+            from google.oauth2.service_account import Credentials
+
+            # Set up creds and open your sheet
+            scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+        
+            # Load credentials from Streamlit secrets
+            service_account_info = st.secrets["gcp_service_account"]
+            creds = Credentials.from_service_account_info(service_account_info, scopes=scopes)
+        
+            client = gspread.authorize(creds)
+            import datetime
+        
+            # Timestamp for filenames and sheets
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+            try:
+                sheet = client.open("GCF").worksheet("Factorization")
+            except gspread.WorksheetNotFound:
+                st.error(f"Worksheet '{selected_class}' not found. Please check your Google Sheet.")
+
+            row = [name, timestamp]
+            sheet.append_row(row)
+            st.success("✅ Score submitted!")
+    else:
+        st.warning("Please enter a name.")
 
     if st.button("🔁 Start Over"):
         st.session_state.index = 0
