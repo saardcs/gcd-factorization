@@ -58,35 +58,37 @@ if st.session_state.index < len(problems):
     # Submit button
     if st.button("Submit"):
         # Clean up the input to remove non-numeric and spaces
-        a_factors = set(map(int, a_factors.replace(" ", "").split(",")))
-        b_factors = set(map(int, b_factors.replace(" ", "").split(",")))
-        
-        # Check if factors are correct
-        correct_a_factors = set([i for i in range(1, a+1) if a % i == 0])
-        correct_b_factors = set([i for i in range(1, b+1) if b % i == 0])
+        try:
+            a_factors = set(map(int, a_factors.replace(" ", "").split(",")))
+            b_factors = set(map(int, b_factors.replace(" ", "").split(",")))
 
-        if a_factors != correct_a_factors:
-            st.error("❌ Incorrect factors for A. Please check your list and try again!")
-            return
-        
-        if b_factors != correct_b_factors:
-            st.error("❌ Incorrect factors for B. Please check your list and try again!")
-            return
-        
-        # Calculate GCD from common factors
-        common_factors = a_factors & b_factors  # Intersection of sets
-        correct_gcd = max(common_factors)
+            # Correct factors
+            correct_a_factors = set([i for i in range(1, a + 1) if a % i == 0])
+            correct_b_factors = set([i for i in range(1, b + 1) if b % i == 0])
 
-        # Ask for GCD after listing the factors
-        user_gcd = st.number_input(f"Now, what is the GCD of {a} and {b}?", min_value=1, step=1)
+            # Check if factors are correct
+            if a_factors != correct_a_factors:
+                st.error("❌ Incorrect factors for A. Please check your list and try again!")
+            elif b_factors != correct_b_factors:
+                st.error("❌ Incorrect factors for B. Please check your list and try again!")
+            else:
+                # Calculate GCD from common factors
+                common_factors = a_factors & b_factors  # Intersection of sets
+                correct_gcd = max(common_factors)
 
-        if user_gcd == correct_gcd:
-            st.success("✅ Correct! The GCD is indeed " + str(correct_gcd))
-            st.session_state.score += 1
-            st.session_state.index += 1
-            st.rerun()
-        else:
-            st.error("❌ Incorrect GCD. Try again!")
+                # Ask for GCD after listing the factors
+                user_gcd = st.number_input(f"Now, what is the GCD of {a} and {b}?", min_value=1, step=1)
+
+                if user_gcd == correct_gcd:
+                    st.success("✅ Correct! The GCD is indeed " + str(correct_gcd))
+                    st.session_state.score += 1
+                    st.session_state.index += 1
+                    st.rerun()
+                else:
+                    st.error("❌ Incorrect GCD. Try again!")
+
+        except ValueError:
+            st.error("❌ Invalid input. Please list the factors correctly (e.g., 1, 2, 3).")
 
 else:
     st.success("🎉 You've completed all problems!")
