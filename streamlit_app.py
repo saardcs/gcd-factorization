@@ -69,7 +69,7 @@ if st.session_state.index < len(problems):
                 st.session_state.index += 1
                 st.session_state.correct_factors = False
                 st.session_state.correct_gcd = None
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error("❌ Incorrect GCD. Try again!")
 else:
@@ -81,4 +81,4 @@ else:
         st.session_state.score = 0
         st.session_state.correct_factors = False
         st.session_state.correct_gcd = None
-        st.experimental_rerun()
+        st.rerun()
