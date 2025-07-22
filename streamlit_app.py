@@ -67,6 +67,7 @@ if st.session_state.index < len(problems):
                     st.session_state.correct_a_factors = sorted(correct_a)
                     st.session_state.correct_b_factors = sorted(correct_b)
                     st.session_state.correct_gcd = max(correct_a & correct_b)
+                    st.rerun()
             except ValueError:
                 st.error("❌ Invalid input. Please list the factors correctly (e.g., 1, 2, 3).")
 
