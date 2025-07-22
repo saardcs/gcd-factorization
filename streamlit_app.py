@@ -66,11 +66,11 @@ if st.session_state.index < len(problems):
             correct_a = set(i for i in range(1, a + 1) if a % i == 0)
             correct_b = set(i for i in range(1, b + 1) if b % i == 0)
             if a_factors != correct_a:
-                st.error("❌ Incorrect factors for A. Please check your list and try again!")
+                st.error(f"❌ Incorrect factors for {a}. Please check your list and try again!")
                 st.session_state.correct_factors = False
                 st.session_state.correct_gcd = None
             elif b_factors != correct_b:
-                st.error("❌ Incorrect factors for B. Please check your list and try again!")
+                st.error(f"❌ Incorrect factors for {b}. Please check your list and try again!")
                 st.session_state.correct_factors = False
                 st.session_state.correct_gcd = None
             else:
