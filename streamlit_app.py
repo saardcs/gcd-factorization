@@ -42,7 +42,7 @@ if st.session_state.index < len(problems):
     st.subheader(f"🔢 Problem {st.session_state.index + 1} of {len(problems)}")
     st.write(f"What are the factors of **{a}** and **{b}**?")
 
-    # If factors not submitted yet
+    # Display the factors input only if they haven't been submitted yet
     if not st.session_state.factors_submitted:
         a_factors = st.text_area(f"List the factors of **{a}** (separate by commas):", key="a_factors", help="Example: 1, 2, 3, 4, 6, 12")
         b_factors = st.text_area(f"List the factors of **{b}** (separate by commas):", key="b_factors", help="Example: 1, 2, 3, 6, 9, 18")
@@ -90,18 +90,18 @@ if st.session_state.index < len(problems):
                             st.session_state.correct_factors = False  # Reset factors check
                             st.session_state.user_gcd = None  # Reset user GCD
                             st.session_state.correct_gcd = None  # Reset correct GCD
-                            st.rerun()  # Move to the next problem after correct answer
+                            st.experimental_rerun()  # Move to the next problem after correct answer
                         else:
                             st.error("❌ Incorrect GCD. Try again!")
-                            # Only reset the GCD input, not the factors input
+                            # Do not reset factors or any other field, just keep the same problem
                             st.session_state.user_gcd = None  # Reset user GCD so they can try again
-                            st.rerun()  # Refresh to keep GCD input visible for retry
+                            st.experimental_rerun()  # Refresh to keep GCD input visible for retry
             except ValueError:
                 st.error("❌ Invalid input. Please list the factors correctly (e.g., 1, 2, 3).")
     
     # If factors are confirmed, prompt for GCD input
-    elif st.session_state.factors_submitted and not st.session_state.correct_factors:
-        st.write("Please submit the correct factors to proceed.")
+    elif st.session_state.factors_submitted and st.session_state.correct_factors:
+        st.write("Now, enter the GCD of **{a}** and **{b}**.")
 
 else:
     st.success("🎉 You've completed all problems!")
@@ -114,4 +114,4 @@ else:
         st.session_state.correct_factors = False  # Reset factors check
         st.session_state.user_gcd = None  # Reset GCD
         st.session_state.correct_gcd = None  # Reset correct GCD
-        st.rerun()
+        st.experimental_rerun()  # Restart the process from the beginning
