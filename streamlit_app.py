@@ -75,7 +75,7 @@ if st.session_state.index < len(problems):
 else:
     st.success("🎉 You've completed all problems!")
     # st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
-    name = st.text_input("Enter your name:")
+    name = st.text_input("Enter your nickname:")
     team = st.text_input("Enter your number:")
     
     if st.button("Submit Score"):
