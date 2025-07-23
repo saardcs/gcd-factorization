@@ -76,7 +76,7 @@ else:
     st.success("🎉 You've completed all problems!")
     # st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
     name = st.text_input("Enter your nickname:")
-    team = st.text_input("Enter your number:")
+    team = st.text_input("Enter your roll number:")
     
     if st.button("Submit Score"):
         if name.strip() and team.strip():
@@ -101,7 +101,7 @@ else:
             except gspread.WorksheetNotFound:
                 st.error(f"Worksheet '{selected_class}' not found. Please check your Google Sheet.")
 
-            row = [name.strip(), team.strip(), timestamp]
+            row = [team.strip(), name.strip(), timestamp]
             sheet.append_row(row)
             st.success("✅ Score submitted!")
             # if st.button("🔁 Start Over"):
@@ -111,4 +111,4 @@ else:
             #     st.session_state.correct_gcd = None
             #     st.rerun()
         else:
-            st.warning("Please enter your name and team name.")
+            st.warning("Please enter your nickname and roll number.")
