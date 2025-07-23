@@ -76,7 +76,7 @@ else:
     st.success("🎉 You've completed all problems!")
     # st.write(f"Your score: **{st.session_state.score} / {len(problems)}**")
     name = st.text_input("Enter your name:")
-    team = st.text_input("Enter your team:")
+    team = st.text_input("Enter your number:")
     
     if st.button("Submit Score"):
         if name.strip() and team.strip():
@@ -97,7 +97,7 @@ else:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
             try:
-                sheet = client.open("GCF").worksheet("Factorization")
+                sheet = client.open("Review").worksheet("GCD")
             except gspread.WorksheetNotFound:
                 st.error(f"Worksheet '{selected_class}' not found. Please check your Google Sheet.")
 
